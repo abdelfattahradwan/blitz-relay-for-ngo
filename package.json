@@ -1,0 +1,22 @@
+{
+	"name": "com.winterboltgames.blitzrelayforngo",
+	"version": "1.0.0",
+	"displayName": "Blitz Relay for NGO",
+	"description": "A Blitz Relay transport for Netcode for GameObjects.",
+	"unity": "6000.0",
+	"author": {
+		"name": "Winterbolt Games",
+		"url": "https://winterboltgames.com/"
+	},
+	"dependencies": {
+		"com.unity.netcode.gameobjects": "2.13.0"
+	},
+	"keywords": [
+		"blitz",
+		"relay",
+		"multiplayer",
+		"networking",
+		"netcode-for-game-objects",
+		"ngo"
+	]
+}
