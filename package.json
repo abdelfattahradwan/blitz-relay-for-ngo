@@ -1,6 +1,6 @@
 {
 	"name": "com.winterboltgames.blitzrelayforngo",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"displayName": "Blitz Relay for NGO",
 	"description": "A Blitz Relay transport for Netcode for GameObjects.",
 	"unity": "6000.0",
