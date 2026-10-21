@@ -136,7 +136,9 @@ namespace BlitzRelay.Ngo
 		{
 			return networkDelivery switch
 			{
-				NetworkDelivery.Unreliable or NetworkDelivery.UnreliableSequenced => (byte)GameChannel.Unreliable,
+				NetworkDelivery.Unreliable => (byte)GameChannel.Unreliable,
+
+				NetworkDelivery.UnreliableSequenced => (byte)GameChannel.UnreliableSequenced,
 
 				_ => (byte)GameChannel.Reliable,
 			};
@@ -144,7 +146,14 @@ namespace BlitzRelay.Ngo
 
 		protected static DeliveryMethod GetDeliveryMethod(byte gameChannel)
 		{
-			return MessageCodec.IsUnreliableGameChannel(gameChannel) ? DeliveryMethod.Unreliable : DeliveryMethod.ReliableOrdered;
+			return gameChannel switch
+			{
+				(byte)GameChannel.Unreliable => DeliveryMethod.Unreliable,
+
+				(byte)GameChannel.UnreliableSequenced => DeliveryMethod.Sequenced,
+
+				_ => DeliveryMethod.ReliableOrdered,
+			};
 		}
 
 		protected void DisposeOutgoingPackets()

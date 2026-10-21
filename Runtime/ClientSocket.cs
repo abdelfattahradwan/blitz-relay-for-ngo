@@ -101,7 +101,7 @@ namespace BlitzRelay.Ngo
 
 			if (frameSize > maxSinglePacketSize)
 			{
-				if (deliveryMethod == DeliveryMethod.Unreliable) return;
+				if (MessageCodec.IsUnreliableGameChannel(gameChannel)) return;
 
 				byte[] frameBuffer = ArrayPool<byte>.Shared.Rent(frameSize);
 
