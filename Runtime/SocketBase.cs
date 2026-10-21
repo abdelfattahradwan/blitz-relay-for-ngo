@@ -26,6 +26,8 @@ namespace BlitzRelay.Ngo
 
 		protected readonly Queue<DataPacket> OutgoingPackets = new();
 
+		private bool _isPolling;
+
 		public NetManager SocketNetManager { get; protected set; }
 
 		public RelaySocketState SocketState { get; protected set; } = RelaySocketState.Stopped;
@@ -46,7 +48,22 @@ namespace BlitzRelay.Ngo
 
 		internal void PollSocket()
 		{
-			SocketNetManager?.PollEvents();
+			NetManager netManager = SocketNetManager;
+
+			if (netManager == null) return;
+
+			_isPolling = true;
+
+			try
+			{
+				netManager.PollEvents();
+			}
+			finally
+			{
+				_isPolling = false;
+			}
+
+			if (SocketNetManager != netManager) netManager.Stop();
 		}
 
 		internal ulong GetRelayRtt()
@@ -166,7 +183,7 @@ namespace BlitzRelay.Ngo
 
 		protected void StopSocket(bool sendDisconnectMessages)
 		{
-			SocketNetManager?.Stop(sendDisconnectMessages);
+			if (!_isPolling) SocketNetManager?.Stop(sendDisconnectMessages);
 
 			SocketNetManager = null;
 
