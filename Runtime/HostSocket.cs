@@ -173,7 +173,14 @@ namespace BlitzRelay.Ngo
 
 			if (SocketState is RelaySocketState.Stopping or RelaySocketState.Stopped) return;
 
-			Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ClosedByRemote, $"Relay host connection lost. Reason: {disconnectInfo.Reason}.");
+			if (MessageCodec.TryReadError(disconnectInfo.AdditionalData.GetRemainingBytesSpan(), out ErrorCode errorCode))
+			{
+				Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ProtocolError, $"Relay returned error code {errorCode}.");
+			}
+			else
+			{
+				Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ClosedByRemote, $"Relay host connection lost. Reason: {disconnectInfo.Reason}.");
+			}
 
 			StopSocket(false);
 
