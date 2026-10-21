@@ -14,19 +14,20 @@ connections to the relay.
 
 - Unity 6000.0 or later
 - [Netcode for GameObjects](https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.13/manual/index.html)
+- A [Blitz Relay](https://github.com/abdelfattahradwan/blitz-relay) server running v1.3.0 or later
 
 ## Installation
 
 Open the Unity Package Manager (Window > Package Manager) and add the package via git URL:
 
 ```
-https://github.com/abdelfattahradwan/blitz-relay-for-ngo.git?path=/Packages/com.winterboltgames.blitzrelayforngo
+https://github.com/abdelfattahradwan/blitz-relay-for-ngo.git
 ```
 
 Or add the following entry to your project's `Packages/manifest.json`:
 
 ```json
-"com.winterboltgames.blitzrelayforngo": "https://github.com/abdelfattahradwan/blitz-relay-for-ngo.git?path=/Packages/com.winterboltgames.blitzrelayforngo"
+"com.winterboltgames.blitzrelayforngo": "https://github.com/abdelfattahradwan/blitz-relay-for-ngo.git"
 ```
 
 ## Features
