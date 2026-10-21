@@ -84,7 +84,7 @@ When a client is promoted to host, the transport stores the claim data and raise
 its own lifecycle, so your game code should shut down the current client session and start host mode. The next server
 start will claim the promoted room automatically.
 
-## License
+## Licence
 
 MIT License. See [LICENSE](LICENSE) for details.
 
