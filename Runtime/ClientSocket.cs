@@ -65,6 +65,8 @@ namespace BlitzRelay.Ngo
 				return;
 			}
 
+			if (OutgoingPackets.Count == 0) return;
+
 			while (OutgoingPackets.TryDequeue(out DataPacket outgoingPacket))
 			{
 				try
@@ -76,6 +78,8 @@ namespace BlitzRelay.Ngo
 					outgoingPacket.Dispose();
 				}
 			}
+
+			RelayPeer.NetManager.TriggerUpdate();
 		}
 
 		internal void SendToServer(byte channelId, ArraySegment<byte> payload)
