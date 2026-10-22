@@ -169,6 +169,20 @@ namespace BlitzRelay.Ngo
 			};
 		}
 
+		protected static NetworkTransport.DisconnectEvents GetDisconnectEvent(DisconnectReason disconnectReason)
+		{
+			return disconnectReason switch
+			{
+				DisconnectReason.ConnectionFailed => NetworkTransport.DisconnectEvents.MaxConnectionAttempts,
+
+				DisconnectReason.Timeout => NetworkTransport.DisconnectEvents.ProtocolTimeout,
+
+				DisconnectReason.ConnectionRejected => NetworkTransport.DisconnectEvents.AuthenticationFailure,
+
+				_ => NetworkTransport.DisconnectEvents.ClosedByRemote,
+			};
+		}
+
 		protected void DisposeOutgoingPackets()
 		{
 			while (OutgoingPackets.TryDequeue(out DataPacket packet))

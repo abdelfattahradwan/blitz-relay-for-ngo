@@ -179,7 +179,7 @@ namespace BlitzRelay.Ngo
 			}
 			else
 			{
-				Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ClosedByRemote, $"Relay host connection lost. Reason: {disconnectInfo.Reason}.");
+				Transport.SetRelayDisconnectEvent(GetDisconnectEvent(disconnectInfo.Reason), $"Relay host connection lost. Reason: {disconnectInfo.Reason}.");
 			}
 
 			StopSocket(false);

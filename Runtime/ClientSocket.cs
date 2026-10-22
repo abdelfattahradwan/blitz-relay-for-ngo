@@ -152,7 +152,7 @@ namespace BlitzRelay.Ngo
 
 			NetworkTransport.DisconnectEvents disconnectEvent = _pendingPromotionDisconnect
 																	? NetworkTransport.DisconnectEvents.Disconnected
-																	: NetworkTransport.DisconnectEvents.ClosedByRemote;
+																	: GetDisconnectEvent(disconnectInfo.Reason);
 
 			Transport.SetRelayDisconnectEvent(disconnectEvent, $"Relay client connection closed. Reason: {disconnectInfo.Reason}.");
 
