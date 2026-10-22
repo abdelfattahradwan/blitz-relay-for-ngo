@@ -62,7 +62,7 @@ namespace BlitzRelay.Ngo
 			get => 0UL;
 		}
 
-		public bool IsRelayHostAvailable { get; private set; } = true;
+		public bool IsRelayHostAvailable { get; private set; }
 
 		public bool HasPendingHostPromotion
 		{
@@ -99,6 +99,8 @@ namespace BlitzRelay.Ngo
 			InitialiseSockets();
 
 			UpdateTimeout();
+
+			if (!HasPendingHostPromotion) roomCode = string.Empty;
 
 			int requestedMaximumClients = _pendingPromotedMaximumClients > 0 ? _pendingPromotedMaximumClients : maximumClients;
 
