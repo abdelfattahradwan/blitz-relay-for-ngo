@@ -14,7 +14,7 @@ connections to the relay.
 
 - Unity 6000.0 or later
 - [Netcode for GameObjects](https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.13/manual/index.html)
-- A [Blitz Relay](https://github.com/abdelfattahradwan/blitz-relay) server running v1.3.0 or later
+- A [Blitz Relay](https://github.com/abdelfattahradwan/blitz-relay) server running v1.3.1 or later
 
 ## Installation
 
@@ -34,12 +34,12 @@ Or add the following entry to your project's `Packages/manifest.json`:
 
 - **Relay-based architecture**: All game traffic flows through a relay server, so clients never need to expose their
   IP addresses or open firewall ports.
-- **Room-based**: Hosts create rooms and receive a room code from the relay; clients join by supplying
-  that room code.
-- **Basic Host migration**: When the current host disconnects, the relay can promote an existing client to become the
-  new host.
+- **Room-based**: Hosts create rooms and receive a room code from the relay; clients join by supplying that room code.
+- **Basic host migration**: When the host of a persistent room disconnects, the relay promotes an existing client to
+  become the new host. See [Host Promotion](#host-promotion).
 - **Host removal**: When the relay removes the host through its HTTP API (Blitz Relay v1.4.0 or later), the transport
-  reports a transport failure with the `HostRemoved` error, so NGO shuts down the host session.
+  reports a transport failure with the `HostRemoved` error, so NGO shuts down the host session. See
+  [Relay Errors](#relay-errors).
 
 ## Setup
 
@@ -47,7 +47,8 @@ Or add the following entry to your project's `Packages/manifest.json`:
 2. Add a `BlitzRelayTransport` component to the same GameObject.
 3. Assign the `BlitzRelayTransport` component to `NetworkManager.NetworkConfig.NetworkTransport`.
 4. For hosts, set the relay address, port, key, and maximum clients, then call `NetworkManager.StartHost()` or
-   `NetworkManager.StartServer()`.
+   `NetworkManager.StartServer()`. Once the relay has created the room, `OnRelayHostAvailabilityChanged(true)` fires and
+   `GetRoomCode()` returns the code to share with clients.
 5. For clients, set the relay address, port, key, and room code, then call `NetworkManager.StartClient()`.
 
 ## Configuration
@@ -71,7 +72,8 @@ Several methods and events are available for script-driven configuration:
 - `SetRelayAddress(string)` / `GetRelayAddress()` - Change or read the relay server address.
 - `SetRelayPort(ushort)` / `GetRelayPort()` - Change or read the relay server port.
 - `SetRelayKey(string)` / `GetRelayKey()` - Change or read the relay connection key.
-- `SetRoomCode(string)` / `GetRoomCode()` - Set or retrieve the current room code.
+- `SetRoomCode(string)` / `GetRoomCode()` - Set or retrieve the current room code. A host starting a new room clears it
+  until the relay assigns the new code.
 - `SetRoomHostToken(string)` / `GetRoomHostToken()` - Manage the host token assigned by the relay.
 - `SetMaximumClients(int)` / `GetMaximumClients()` - Adjust or read the client limit.
 - `IsRelayHostAvailable` - Indicates whether the relay host is currently available.
@@ -79,6 +81,8 @@ Several methods and events are available for script-driven configuration:
 - `HasPendingHostPromotion` - Indicates whether this client has promotion data waiting to be claimed.
 - `ClearPendingHostPromotion()` - Clears pending host promotion data.
 - `OnHostPromotionReceived` - Event that fires when the relay promotes this client to host.
+- `GetCurrentRtt(ulong)` - Round-trip time in milliseconds between this instance and the relay. NGO uses it as the
+  connection's round-trip time, so it doesn't include the other side's hop to the relay.
 
 ## Host Promotion
 
@@ -90,6 +94,16 @@ the claim succeeds or not. Starting a client session instead discards it.
 Clients that weren't promoted stay in the room, but NGO doesn't reconnect them to the new host. Keep each client session
 running until `OnRelayHostAvailabilityChanged` reports that a host is available, then shut it down and start a new
 client session to join the new host.
+
+## Relay Errors
+
+When the relay rejects or closes a client's connection, for example with `RoomNotFound`, `RoomFull`, or `RoomClosed`,
+the transport disconnects the client with `ProtocolError`. NGO then raises `OnClientDisconnectCallback`, and
+`NetworkManager.DisconnectReason` contains the error, such as `Relay returned error code RoomFull.`
+
+When the relay rejects or closes the host's connection, for example with `HostRemoved` or `RoomClosed`, the transport
+reports a transport failure and NGO shuts down the host session. In an `OnTransportFailure` handler, the transport's
+`DisconnectEventMessage` contains the error.
 
 ## Licence
 
