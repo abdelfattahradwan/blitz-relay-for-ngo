@@ -188,13 +188,15 @@ namespace BlitzRelay.Ngo
 					{
 						MessageCodec.ReadHostPromoted(relayPayload, out string roomCode, out int maximumClients, out string claimToken);
 
-						Transport.HandleClientHostPromoted(roomCode, maximumClients, claimToken);
-
 						_pendingPromotionDisconnect = true;
 
 						byte[] acknowledgement = MessageCodec.CreateHostPromotionAck(roomCode, claimToken);
 
 						fromPeer.Send(acknowledgement, MessageCodec.RelayWireChannel, DeliveryMethod.ReliableOrdered);
+
+						fromPeer.NetManager.TriggerUpdate();
+
+						Transport.HandleClientHostPromoted(roomCode, maximumClients, claimToken);
 
 						break;
 					}
