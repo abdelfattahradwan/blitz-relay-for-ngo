@@ -117,8 +117,6 @@ namespace BlitzRelay.Ngo
 
 				Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ProtocolError, startupException.Message);
 
-				Transport.EnqueueTransportFailure();
-
 				return false;
 			}
 
@@ -129,8 +127,6 @@ namespace BlitzRelay.Ngo
 				SocketState = RelaySocketState.Stopped;
 
 				Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ProtocolError, "Failed to start relay socket.");
-
-				Transport.EnqueueTransportFailure();
 
 				return false;
 			}
