@@ -209,8 +209,6 @@ namespace BlitzRelay.Ngo
 
 						Transport.HandleRelayHostAvailability(true);
 
-						if (_claimExistingRoom) Transport.ClearPendingHostPromotion();
-
 						SocketState = RelaySocketState.Started;
 
 						break;

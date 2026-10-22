@@ -85,6 +85,8 @@ namespace BlitzRelay.Ngo
 
 		public override bool StartClient()
 		{
+			ClearPendingHostPromotion();
+
 			InitialiseSockets();
 
 			UpdateTimeout();
@@ -101,6 +103,8 @@ namespace BlitzRelay.Ngo
 			int requestedMaximumClients = _pendingPromotedMaximumClients > 0 ? _pendingPromotedMaximumClients : maximumClients;
 
 			bool started = ServerSocket.StartConnection(relayAddress, relayPort, relayKey, requestedMaximumClients, _pendingPromotedClaimToken, roomCode);
+
+			ClearPendingHostPromotion();
 
 			return started;
 		}
@@ -261,8 +265,6 @@ namespace BlitzRelay.Ngo
 		internal void HandleClientHostPromoted(string promotedRoomCode, int promotedMaximumClients, string claimToken)
 		{
 			roomCode = promotedRoomCode;
-
-			maximumClients = promotedMaximumClients;
 
 			_pendingPromotedMaximumClients = promotedMaximumClients;
 
