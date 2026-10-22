@@ -360,7 +360,7 @@ namespace BlitzRelay.Ngo
 		{
 			if (_lastPolledEvent == null) return;
 
-			_lastPolledEvent?.Dispose();
+			_lastPolledEvent.Value.Dispose();
 
 			_lastPolledEvent = null;
 		}
