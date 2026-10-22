@@ -167,8 +167,6 @@ namespace BlitzRelay.Ngo
 
 		public override void DisconnectLocalClient()
 		{
-			SetDisconnectEvent(DisconnectEvents.Disconnected);
-
 			ClientSocket.StopConnection(false);
 		}
 
