@@ -61,9 +61,9 @@ namespace BlitzRelay.Ngo
 			finally
 			{
 				_isPolling = false;
-			}
 
-			if (SocketNetManager != netManager) netManager.Stop();
+				if (SocketNetManager != netManager) netManager.Stop();
+			}
 		}
 
 		internal ulong GetRelayRtt()

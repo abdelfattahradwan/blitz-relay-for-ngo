@@ -270,7 +270,14 @@ namespace BlitzRelay.Ngo
 
 			HandleRelayHostAvailability(false);
 
-			OnHostPromotionReceived?.Invoke(new HostPromotion(promotedRoomCode, promotedMaximumClients));
+			try
+			{
+				OnHostPromotionReceived?.Invoke(new HostPromotion(promotedRoomCode, promotedMaximumClients));
+			}
+			catch (Exception exception)
+			{
+				Debug.LogException(exception);
+			}
 		}
 
 		internal void HandleRelayHostAvailability(bool isAvailable)
@@ -279,7 +286,14 @@ namespace BlitzRelay.Ngo
 
 			IsRelayHostAvailable = isAvailable;
 
-			OnRelayHostAvailabilityChanged?.Invoke(isAvailable);
+			try
+			{
+				OnRelayHostAvailabilityChanged?.Invoke(isAvailable);
+			}
+			catch (Exception exception)
+			{
+				Debug.LogException(exception);
+			}
 		}
 
 		internal void EnqueueConnect(ulong clientId)
