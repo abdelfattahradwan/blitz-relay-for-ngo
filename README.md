@@ -82,9 +82,14 @@ Several methods and events are available for script-driven configuration:
 
 ## Host Promotion
 
-When a client is promoted to host, the transport stores the claim data and raises `OnHostPromotionReceived`. NGO owns
-its own lifecycle, so your game code should shut down the current client session and start host mode. The next server
-start will claim the promoted room automatically.
+When a client is promoted to host, the transport acknowledges the promotion, stores the claim data, and raises
+`OnHostPromotionReceived`. NGO owns its own lifecycle, so your game code should shut down the current client session
+and start host mode. The next server start claims the promoted room automatically and uses up the claim data, whether
+the claim succeeds or not. Starting a client session instead discards it.
+
+Clients that weren't promoted stay in the room, but NGO doesn't reconnect them to the new host. Keep each client session
+running until `OnRelayHostAvailabilityChanged` reports that a host is available, then shut it down and start a new
+client session to join the new host.
 
 ## Licence
 
