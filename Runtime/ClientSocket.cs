@@ -145,9 +145,7 @@ namespace BlitzRelay.Ngo
 			{
 				Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ProtocolError, $"Relay returned error code {errorCode}.");
 
-				StopConnection(false);
-
-				Transport.EnqueueTransportFailure();
+				StopConnection(true);
 
 				return;
 			}
@@ -247,9 +245,7 @@ namespace BlitzRelay.Ngo
 
 						Transport.SetRelayDisconnectEvent(NetworkTransport.DisconnectEvents.ProtocolError, $"Relay returned error code {errorCode}.");
 
-						StopConnection(false);
-
-						Transport.EnqueueTransportFailure();
+						StopConnection(true);
 
 						break;
 					}
